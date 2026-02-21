@@ -1,0 +1,79 @@
+/* === ステータスメッセージ === */
+"status.ready" = "写真とGPXファイルを読み込んでください。";
+"status.photosAdded %lld" = "%lld枚の写真を追加しました。";
+"status.noNewPhotos" = "追加する新しい写真がありません。";
+"status.noNewGPX" = "追加する新しいGPXファイルがありません。";
+"status.gpxLoaded %lld %lld" = "%1$lld個のGPXファイルを読み込み（トラックポイント%2$lld個）";
+"status.matchResult %lld %lld" = "%1$lld枚マッチ / 全%2$lld枚";
+"status.noMatchedToWrite" = "書き込めるマッチ済み写真がありません。";
+"status.noMatchedInSelection" = "選択中にマッチ済み写真がありません。";
+"status.manualApplied %lld" = "%lld枚に手動座標を設定しました。";
+"status.writing %lld %lld" = "GPS書き込み中... (%1$lld/%2$lld)";
+"status.writeComplete %lld %lld" = "GPS書き込み完了: %1$lld/%2$lld枚成功";
+
+/* === フィルター === */
+"filter.all" = "すべて";
+"filter.hasGPS" = "GPS付き";
+"filter.matched" = "マッチ済み";
+"filter.noMatch" = "マッチなし";
+"filter.noTime" = "時刻なし";
+"filter.written" = "書き込み済み";
+
+/* === ソート === */
+"sort.filename" = "ファイル名";
+"sort.dateTaken" = "撮影日時";
+
+/* === ツールバー === */
+"toolbar.addPhotos" = "写真を追加";
+"toolbar.addPhotos.help" = "写真ファイルまたはフォルダを選択";
+"toolbar.addGPX" = "GPXを追加";
+"toolbar.addGPX.help" = "GPXファイルを選択";
+"toolbar.runMatching" = "マッチ実行";
+"toolbar.runMatching.help" = "GPXトラックと写真をマッチング";
+"toolbar.writeAll" = "すべて書き込み";
+"toolbar.writeAll.help" = "マッチ済みのすべての写真にGPSを書き込み";
+"toolbar.clear" = "クリア";
+"toolbar.clear.help" = "すべての写真とGPXを削除";
+
+/* === パネルタイトル === */
+"panel.selectPhotos" = "写真を選択";
+"panel.selectGPX" = "GPXファイルを選択";
+
+/* === 写真リスト === */
+"photoList.filter" = "フィルター";
+"photoList.sort" = "並べ替え";
+"photoList.count %lld" = "%lld枚";
+"photoList.noPhotos" = "写真なし";
+"photoList.noPhotos.desc" = "写真ファイルをドラッグするか\nツールバーの追加ボタンをお使いください。";
+"photoList.noResults" = "結果なし";
+"photoList.noResults.desc %@" = "「%@」フィルターに該当する写真がありません。";
+"photoList.writeSelected" = "選択した写真にGPSを書き込み";
+
+/* === 写真ステータス === */
+"photoStatus.pending" = "解析中…";
+"photoStatus.hasGPS" = "GPS付き";
+"photoStatus.matched" = "マッチ済み";
+"photoStatus.noTime" = "時刻なし";
+"photoStatus.noMatch" = "マッチなし";
+"photoStatus.written" = "書き込み済み";
+"photoStatus.error" = "エラー";
+
+/* === ステータスバー === */
+"statusBar.hasGPS" = "GPS付き";
+"statusBar.matched" = "マッチ済み";
+"statusBar.written" = "書き込み済み";
+"statusBar.failed" = "失敗";
+
+/* === マップ === */
+"map.title" = "マップ";
+"map.empty.desc" = "写真とGPXファイルを読み込むと\nトラックと位置がマップに表示されます。";
+"map.manualPin" = "手動ピン";
+"map.manual.selectFirst" = "サイドバーで写真を選択してからマップをクリックしてください。";
+"map.manual.selected %lld" = "%lld枚選択中 — マップをクリックして位置を設定";
+"map.manual.title" = "手動位置設定";
+"map.manual.applyCount %lld" = "%lld枚に適用";
+"map.manual.apply" = "適用";
+"map.manual.write" = "書き込み";
+"map.manual.cancel" = "キャンセル";
+"map.manual.modeHelp" = "手動位置設定モード";
+"map.fitAll" = "全体表示";

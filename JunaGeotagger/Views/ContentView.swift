@@ -48,33 +48,33 @@ struct ContentView: View {
             Button {
                 viewModel.importPhotos()
             } label: {
-                Label("사진 추가", systemImage: "photo.on.rectangle.angled")
+                Label("toolbar.addPhotos", systemImage: "photo.on.rectangle.angled")
             }
-            .help("사진 파일 또는 폴더를 선택합니다")
+            .help(Text("toolbar.addPhotos.help"))
 
             Button {
                 viewModel.importGPX()
             } label: {
-                Label("GPX 추가", systemImage: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
+                Label("toolbar.addGPX", systemImage: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
             }
-            .help("GPX 파일을 선택합니다")
+            .help(Text("toolbar.addGPX.help"))
 
             Divider()
 
             Button {
                 viewModel.runMatching()
             } label: {
-                Label("매칭 실행", systemImage: "arrow.triangle.2.circlepath")
+                Label("toolbar.runMatching", systemImage: "arrow.triangle.2.circlepath")
             }
-            .help("GPX 트랙과 사진을 매칭합니다")
+            .help(Text("toolbar.runMatching.help"))
             .disabled(viewModel.allTrackPoints.isEmpty || viewModel.photos.isEmpty)
 
             Button {
                 viewModel.writeAllMatched()
             } label: {
-                Label("모두 기록", systemImage: "square.and.arrow.down.on.square")
+                Label("toolbar.writeAll", systemImage: "square.and.arrow.down.on.square")
             }
-            .help("매칭된 모든 사진에 GPS를 기록합니다")
+            .help(Text("toolbar.writeAll.help"))
             .disabled(viewModel.matchedCount == 0 || viewModel.isProcessing)
 
             Divider()
@@ -82,9 +82,9 @@ struct ContentView: View {
             Button {
                 viewModel.clearAll()
             } label: {
-                Label("초기화", systemImage: "trash")
+                Label("toolbar.clear", systemImage: "trash")
             }
-            .help("모든 사진과 GPX를 제거합니다")
+            .help(Text("toolbar.clear.help"))
         }
     }
 
@@ -154,10 +154,10 @@ struct StatusBarView: View {
 
             if !viewModel.photos.isEmpty {
                 HStack(spacing: 12) {
-                    statBadge(count: viewModel.hasGPSCount, label: "GPS 있음", color: .blue)
-                    statBadge(count: viewModel.matchedCount, label: "매칭됨", color: .green)
-                    statBadge(count: viewModel.writtenCount, label: "기록됨", color: .purple)
-                    statBadge(count: viewModel.noMatchCount, label: "실패", color: .red)
+                    statBadge(count: viewModel.hasGPSCount, label: String(localized: "statusBar.hasGPS"), color: .blue)
+                    statBadge(count: viewModel.matchedCount, label: String(localized: "statusBar.matched"), color: .green)
+                    statBadge(count: viewModel.writtenCount, label: String(localized: "statusBar.written"), color: .purple)
+                    statBadge(count: viewModel.noMatchCount, label: String(localized: "statusBar.failed"), color: .red)
                 }
             }
         }

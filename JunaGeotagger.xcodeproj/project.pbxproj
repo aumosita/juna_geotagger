@@ -369,7 +369,7 @@
 				3DF8BC48768E274DC0B6780C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		CD9421BB8E166AF5936F4398 /* Build configuration list for PBXNativeTarget "JunaGeotagger" */ = {
 			isa = XCConfigurationList;
@@ -378,7 +378,7 @@
 				1DBE22F8B3EB7805D93E1DA1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

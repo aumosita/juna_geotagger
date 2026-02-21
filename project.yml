@@ -6,6 +6,7 @@ options:
   xcodeVersion: "16.0"
   createIntermediateGroups: true
   generateEmptyDirectories: false
+  defaultConfig: Release
 
 settings:
   base:
@@ -18,6 +19,10 @@ targets:
     platform: macOS
     sources:
       - path: JunaGeotagger
+        excludes:
+          - "Resources/**"
+    resources:
+      - path: JunaGeotagger/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.aumosita.JunaGeotagger

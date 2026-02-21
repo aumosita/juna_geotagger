@@ -16,7 +16,7 @@ final class MainViewModel {
 
     var selectedPhotoIDs: Set<UUID> = []
     var isProcessing = false
-    var statusMessage = "사진과 GPX 파일을 불러오세요."
+    var statusMessage = String(localized: "status.ready")
     var maxGapSeconds: TimeInterval = GeotagEngine.defaultMaxGapSeconds
 
     /// 지도에서 선택한 좌표 (수동 지오태깅용)
@@ -27,17 +27,29 @@ final class MainViewModel {
     var photoSort: PhotoSort = .filename
 
     enum PhotoFilter: String, CaseIterable {
-        case all       = "전체"
-        case hasGPS    = "GPS 있음"
-        case matched   = "매칭됨"
-        case noMatch   = "매칭 실패"
-        case noTime    = "시각 없음"
-        case written   = "기록 완료"
+        case all, hasGPS, matched, noMatch, noTime, written
+
+        var label: String {
+            switch self {
+            case .all:     String(localized: "filter.all")
+            case .hasGPS:  String(localized: "filter.hasGPS")
+            case .matched: String(localized: "filter.matched")
+            case .noMatch: String(localized: "filter.noMatch")
+            case .noTime:  String(localized: "filter.noTime")
+            case .written: String(localized: "filter.written")
+            }
+        }
     }
 
     enum PhotoSort: String, CaseIterable {
-        case filename  = "파일명"
-        case dateTaken = "촬영 시각"
+        case filename, dateTaken
+
+        var label: String {
+            switch self {
+            case .filename:  String(localized: "sort.filename")
+            case .dateTaken: String(localized: "sort.dateTaken")
+            }
+        }
     }
 
     /// 필터 + 정렬이 적용된 사진 목록
@@ -93,7 +105,7 @@ final class MainViewModel {
     /// Open Panel로 사진 파일 선택
     func importPhotos() {
         let panel = NSOpenPanel()
-        panel.title = "사진 선택"
+        panel.title = String(localized: "panel.selectPhotos")
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = true
         panel.canChooseFiles = true
@@ -135,14 +147,14 @@ final class MainViewModel {
         let newURLs = fileURLs.filter { !existingPaths.contains($0.path) }
 
         guard !newURLs.isEmpty else {
-            statusMessage = "추가할 새 사진이 없습니다."
+            statusMessage = String(localized: "status.noNewPhotos")
             return
         }
 
         let newPhotos = newURLs.map { PhotoItem(url: $0) }
         photos.append(contentsOf: newPhotos)
 
-        statusMessage = "\(newPhotos.count)장의 사진을 추가했습니다."
+        statusMessage = String(localized: "status.photosAdded \(newPhotos.count)")
 
         // 백그라운드에서 메타데이터 읽기
         Task {
@@ -156,7 +168,7 @@ final class MainViewModel {
     /// Open Panel로 GPX 파일 선택
     func importGPX() {
         let panel = NSOpenPanel()
-        panel.title = "GPX 파일 선택"
+        panel.title = String(localized: "panel.selectGPX")
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
@@ -175,7 +187,7 @@ final class MainViewModel {
         let existingPaths = Set(gpxFiles.map { $0.url.path })
         let newURLs = gpxURLs.filter { !existingPaths.contains($0.path) }
         guard !newURLs.isEmpty else {
-            statusMessage = "추가할 새 GPX 파일이 없습니다."
+            statusMessage = String(localized: "status.noNewGPX")
             return
         }
 
@@ -191,7 +203,7 @@ final class MainViewModel {
                 .sorted { $0.time < $1.time }
 
             let pointCount = newFiles.reduce(0) { $0 + $1.trackPoints.count }
-            self.statusMessage = "\(newFiles.count)개 GPX 파일 로드 (트랙포인트 \(pointCount)개)"
+            self.statusMessage = String(localized: "status.gpxLoaded \(newFiles.count) \(pointCount)")
 
             self.runMatching()
         }
@@ -211,7 +223,7 @@ final class MainViewModel {
         GeotagEngine.matchPhotos(pendingPhotos, trackPoints: allTrackPoints, maxGap: maxGapSeconds)
 
         let matched = photos.filter { $0.status == .matched }.count
-        statusMessage = "\(matched)장 매칭 완료 / 전체 \(photos.count)장"
+        statusMessage = String(localized: "status.matchResult \(matched) \(photos.count)")
     }
 
     // MARK: - GPS 기록
@@ -220,7 +232,7 @@ final class MainViewModel {
     func writeAllMatched() {
         let targets = photos.filter { $0.status == .matched }
         guard !targets.isEmpty else {
-            statusMessage = "기록할 매칭된 사진이 없습니다."
+            statusMessage = String(localized: "status.noMatchedToWrite")
             return
         }
         writeGPS(to: targets)
@@ -232,7 +244,7 @@ final class MainViewModel {
             selectedPhotoIDs.contains($0.id) && $0.status == .matched
         }
         guard !targets.isEmpty else {
-            statusMessage = "선택된 사진 중 매칭된 것이 없습니다."
+            statusMessage = String(localized: "status.noMatchedInSelection")
             return
         }
         writeGPS(to: targets)
@@ -249,12 +261,12 @@ final class MainViewModel {
             photo.status = .matched
         }
 
-        statusMessage = "\(targets.count)장에 수동 좌표 지정 완료"
+        statusMessage = String(localized: "status.manualApplied \(targets.count)")
     }
 
     private func writeGPS(to targets: [PhotoItem]) {
         isProcessing = true
-        statusMessage = "GPS 기록 중... (0/\(targets.count))"
+        statusMessage = String(localized: "status.writing \(0) \(targets.count)")
 
         // MainActor에서 필요한 데이터를 미리 추출
         struct WriteJob: Sendable {
@@ -289,11 +301,11 @@ final class MainViewModel {
                 } else {
                     photo.status = .error
                 }
-                self.statusMessage = "GPS 기록 중... (\(job.index + 1)/\(totalCount))"
+                self.statusMessage = String(localized: "status.writing \(job.index + 1) \(totalCount)")
             }
 
             self.isProcessing = false
-            self.statusMessage = "GPS 기록 완료: \(successCount)/\(totalCount)장 성공"
+            self.statusMessage = String(localized: "status.writeComplete \(successCount) \(totalCount)")
         }
     }
 
@@ -305,7 +317,7 @@ final class MainViewModel {
         allTrackPoints.removeAll()
         selectedPhotoIDs.removeAll()
         manualCoordinate = nil
-        statusMessage = "사진과 GPX 파일을 불러오세요."
+        statusMessage = String(localized: "status.ready")
     }
 
     // MARK: - Private

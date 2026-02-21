@@ -14,9 +14,9 @@ struct MapPanelView: View {
         ZStack {
             if viewModel.photos.isEmpty && viewModel.gpxFiles.isEmpty {
                 ContentUnavailableView {
-                    Label("지도", systemImage: "map")
+                    Label("map.title", systemImage: "map")
                 } description: {
-                    Text("사진과 GPX 파일을 불러오면\n지도에 트랙과 위치가 표시됩니다.")
+                    Text("map.empty.desc")
                 }
             } else {
                 mapContent
@@ -49,7 +49,7 @@ struct MapPanelView: View {
 
                 // 수동 지정 핀
                 if let pin = manualPinCoord {
-                    Annotation("수동 지정", coordinate: pin) {
+                    Annotation(String(localized: "map.manualPin"), coordinate: pin) {
                         Image(systemName: "mappin")
                             .font(.title)
                             .foregroundStyle(.red)
@@ -121,9 +121,9 @@ struct MapPanelView: View {
         HStack(spacing: 8) {
             Image(systemName: "hand.tap.fill")
             if viewModel.selectedPhotoIDs.isEmpty {
-                Text("먼저 사이드바에서 사진을 선택한 후, 지도를 클릭하세요.")
+                Text("map.manual.selectFirst")
             } else {
-                Text("\(viewModel.selectedPhotoIDs.count)장 선택됨 — 지도를 클릭하여 위치를 지정하세요")
+                Text("map.manual.selected \(viewModel.selectedPhotoIDs.count)")
             }
         }
         .font(.callout)
@@ -140,13 +140,13 @@ struct MapPanelView: View {
     private func manualPinConfirmation(_ coord: CLLocationCoordinate2D) -> some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("수동 위치 지정")
+                Text("map.manual.title")
                     .font(.callout.bold())
                 Text(String(format: "%.5f, %.5f", coord.latitude, coord.longitude))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 if !viewModel.selectedPhotoIDs.isEmpty {
-                    Text("\(viewModel.selectedPhotoIDs.count)장에 적용")
+                    Text(String(localized: "map.manual.applyCount \(viewModel.selectedPhotoIDs.count)"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -154,7 +154,7 @@ struct MapPanelView: View {
 
             Spacer()
 
-            Button("적용") {
+            Button("map.manual.apply") {
                 viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
                 withAnimation {
                     manualPinCoord = nil
@@ -164,7 +164,7 @@ struct MapPanelView: View {
             .tint(.green)
             .disabled(viewModel.selectedPhotoIDs.isEmpty)
 
-            Button("기록") {
+            Button("map.manual.write") {
                 viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
                 viewModel.writeSelected()
                 withAnimation {
@@ -175,7 +175,7 @@ struct MapPanelView: View {
             .tint(.purple)
             .disabled(viewModel.selectedPhotoIDs.isEmpty)
 
-            Button("취소") {
+            Button("map.manual.cancel") {
                 withAnimation {
                     manualPinCoord = nil
                 }
@@ -211,7 +211,7 @@ struct MapPanelView: View {
                     .foregroundStyle(isManualMode ? .white : .primary)
             }
             .buttonStyle(.plain)
-            .help("수동 위치 지정 모드")
+            .help(Text("map.manual.modeHelp"))
 
             Button {
                 withAnimation {
@@ -223,7 +223,7 @@ struct MapPanelView: View {
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
             .buttonStyle(.plain)
-            .help("전체 보기")
+            .help(Text("map.fitAll"))
 
             if !viewModel.gpxFiles.isEmpty {
                 VStack(alignment: .trailing, spacing: 2) {

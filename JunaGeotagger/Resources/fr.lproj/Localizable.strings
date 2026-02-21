@@ -1,0 +1,79 @@
+/* === Messages d'état === */
+"status.ready" = "Importez des photos et des fichiers GPX pour commencer.";
+"status.photosAdded %lld" = "%lld photo(s) ajoutée(s).";
+"status.noNewPhotos" = "Aucune nouvelle photo à ajouter.";
+"status.noNewGPX" = "Aucun nouveau fichier GPX à ajouter.";
+"status.gpxLoaded %lld %lld" = "%1$lld fichier(s) GPX chargé(s) (%2$lld points de trace)";
+"status.matchResult %lld %lld" = "%1$lld correspondance(s) / %2$lld au total";
+"status.noMatchedToWrite" = "Aucune photo correspondante à enregistrer.";
+"status.noMatchedInSelection" = "Aucune photo correspondante dans la sélection.";
+"status.manualApplied %lld" = "Coordonnées manuelles appliquées à %lld photo(s).";
+"status.writing %lld %lld" = "Écriture GPS... (%1$lld/%2$lld)";
+"status.writeComplete %lld %lld" = "Écriture GPS terminée : %1$lld/%2$lld réussie(s)";
+
+/* === Filtres === */
+"filter.all" = "Tout";
+"filter.hasGPS" = "Avec GPS";
+"filter.matched" = "Correspondance";
+"filter.noMatch" = "Sans correspondance";
+"filter.noTime" = "Sans horodatage";
+"filter.written" = "Enregistré";
+
+/* === Tri === */
+"sort.filename" = "Nom de fichier";
+"sort.dateTaken" = "Date de prise";
+
+/* === Barre d'outils === */
+"toolbar.addPhotos" = "Ajouter des photos";
+"toolbar.addPhotos.help" = "Sélectionner des fichiers ou dossiers de photos";
+"toolbar.addGPX" = "Ajouter GPX";
+"toolbar.addGPX.help" = "Sélectionner des fichiers GPX";
+"toolbar.runMatching" = "Lancer la correspondance";
+"toolbar.runMatching.help" = "Faire correspondre les photos aux traces GPX";
+"toolbar.writeAll" = "Tout enregistrer";
+"toolbar.writeAll.help" = "Enregistrer le GPS sur toutes les photos correspondantes";
+"toolbar.clear" = "Effacer";
+"toolbar.clear.help" = "Supprimer toutes les photos et fichiers GPX";
+
+/* === Titres des panneaux === */
+"panel.selectPhotos" = "Sélectionner des photos";
+"panel.selectGPX" = "Sélectionner des fichiers GPX";
+
+/* === Liste de photos === */
+"photoList.filter" = "Filtre";
+"photoList.sort" = "Tri";
+"photoList.count %lld" = "%lld élément(s)";
+"photoList.noPhotos" = "Aucune photo";
+"photoList.noPhotos.desc" = "Glissez des fichiers photo ici ou\nutilisez le bouton Ajouter dans la barre d'outils.";
+"photoList.noResults" = "Aucun résultat";
+"photoList.noResults.desc %@" = "Aucune photo ne correspond au filtre « %@ ».";
+"photoList.writeSelected" = "Enregistrer GPS de la sélection";
+
+/* === Statut des photos === */
+"photoStatus.pending" = "Analyse…";
+"photoStatus.hasGPS" = "Avec GPS";
+"photoStatus.matched" = "Correspondance";
+"photoStatus.noTime" = "Sans horodatage";
+"photoStatus.noMatch" = "Sans correspondance";
+"photoStatus.written" = "Enregistré";
+"photoStatus.error" = "Erreur";
+
+/* === Barre d'état === */
+"statusBar.hasGPS" = "Avec GPS";
+"statusBar.matched" = "Correspondance";
+"statusBar.written" = "Enregistré";
+"statusBar.failed" = "Échec";
+
+/* === Carte === */
+"map.title" = "Carte";
+"map.empty.desc" = "Importez des photos et des fichiers GPX pour\nafficher les traces et les positions sur la carte.";
+"map.manualPin" = "Épingle manuelle";
+"map.manual.selectFirst" = "Sélectionnez d'abord des photos, puis cliquez sur la carte.";
+"map.manual.selected %lld" = "%lld sélect. — cliquez sur la carte pour définir la position";
+"map.manual.title" = "Position manuelle";
+"map.manual.applyCount %lld" = "Appliquer à %lld photo(s)";
+"map.manual.apply" = "Appliquer";
+"map.manual.write" = "Enregistrer";
+"map.manual.cancel" = "Annuler";
+"map.manual.modeHelp" = "Mode position manuelle";
+"map.fitAll" = "Tout afficher";

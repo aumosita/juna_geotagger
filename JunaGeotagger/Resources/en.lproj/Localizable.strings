@@ -1,0 +1,79 @@
+/* === Status Messages === */
+"status.ready" = "Import photos and GPX files to get started.";
+"status.photosAdded %lld" = "%lld photo(s) added.";
+"status.noNewPhotos" = "No new photos to add.";
+"status.noNewGPX" = "No new GPX files to add.";
+"status.gpxLoaded %lld %lld" = "%1$lld GPX file(s) loaded (%2$lld trackpoints)";
+"status.matchResult %lld %lld" = "%1$lld matched / %2$lld total";
+"status.noMatchedToWrite" = "No matched photos to write.";
+"status.noMatchedInSelection" = "No matched photos in selection.";
+"status.manualApplied %lld" = "Manual coordinates applied to %lld photo(s).";
+"status.writing %lld %lld" = "Writing GPS... (%1$lld/%2$lld)";
+"status.writeComplete %lld %lld" = "GPS write complete: %1$lld/%2$lld succeeded";
+
+/* === Filters === */
+"filter.all" = "All";
+"filter.hasGPS" = "Has GPS";
+"filter.matched" = "Matched";
+"filter.noMatch" = "No Match";
+"filter.noTime" = "No Time";
+"filter.written" = "Written";
+
+/* === Sort === */
+"sort.filename" = "Filename";
+"sort.dateTaken" = "Date Taken";
+
+/* === Toolbar === */
+"toolbar.addPhotos" = "Add Photos";
+"toolbar.addPhotos.help" = "Select photo files or folders";
+"toolbar.addGPX" = "Add GPX";
+"toolbar.addGPX.help" = "Select GPX files";
+"toolbar.runMatching" = "Run Matching";
+"toolbar.runMatching.help" = "Match photos with GPX tracks";
+"toolbar.writeAll" = "Write All";
+"toolbar.writeAll.help" = "Write GPS to all matched photos";
+"toolbar.clear" = "Clear";
+"toolbar.clear.help" = "Remove all photos and GPX files";
+
+/* === Panel Titles === */
+"panel.selectPhotos" = "Select Photos";
+"panel.selectGPX" = "Select GPX Files";
+
+/* === Photo List === */
+"photoList.filter" = "Filter";
+"photoList.sort" = "Sort";
+"photoList.count %lld" = "%lld items";
+"photoList.noPhotos" = "No Photos";
+"photoList.noPhotos.desc" = "Drag photo files here or\nuse the Add Photos button in the toolbar.";
+"photoList.noResults" = "No Results";
+"photoList.noResults.desc %@" = "No photos match the '%@' filter.";
+"photoList.writeSelected" = "Write GPS to Selected";
+
+/* === Photo Status === */
+"photoStatus.pending" = "Analyzing...";
+"photoStatus.hasGPS" = "Has GPS";
+"photoStatus.matched" = "Matched";
+"photoStatus.noTime" = "No Time";
+"photoStatus.noMatch" = "No Match";
+"photoStatus.written" = "Written";
+"photoStatus.error" = "Error";
+
+/* === Status Bar === */
+"statusBar.hasGPS" = "Has GPS";
+"statusBar.matched" = "Matched";
+"statusBar.written" = "Written";
+"statusBar.failed" = "Failed";
+
+/* === Map === */
+"map.title" = "Map";
+"map.empty.desc" = "Import photos and GPX files to\nview tracks and locations on the map.";
+"map.manualPin" = "Manual Pin";
+"map.manual.selectFirst" = "Select photos in the sidebar, then click on the map.";
+"map.manual.selected %lld" = "%lld selected — click the map to set location";
+"map.manual.title" = "Manual Location";
+"map.manual.applyCount %lld" = "Apply to %lld photo(s)";
+"map.manual.apply" = "Apply";
+"map.manual.write" = "Write";
+"map.manual.cancel" = "Cancel";
+"map.manual.modeHelp" = "Manual location mode";
+"map.fitAll" = "Fit All";

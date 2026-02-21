@@ -11,18 +11,18 @@ struct PhotoListView: View {
         VStack(spacing: 0) {
             // 필터 & 정렬 컨트롤
             VStack(spacing: 6) {
-                Picker("필터", selection: $vm.photoFilter) {
+                Picker("photoList.filter", selection: $vm.photoFilter) {
                     ForEach(MainViewModel.PhotoFilter.allCases, id: \.self) { filter in
-                        Text(filter.rawValue).tag(filter)
+                        Text(filter.label).tag(filter)
                     }
                 }
                 .pickerStyle(.menu)
                 .labelsHidden()
 
                 HStack {
-                    Picker("정렬", selection: $vm.photoSort) {
+                    Picker("photoList.sort", selection: $vm.photoSort) {
                         ForEach(MainViewModel.PhotoSort.allCases, id: \.self) { sort in
-                            Text(sort.rawValue).tag(sort)
+                            Text(sort.label).tag(sort)
                         }
                     }
                     .pickerStyle(.segmented)
@@ -30,7 +30,7 @@ struct PhotoListView: View {
 
                     Spacer()
 
-                    Text("\(viewModel.filteredPhotos.count)장")
+                    Text(String(localized: "photoList.count \(viewModel.filteredPhotos.count)"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -49,21 +49,21 @@ struct PhotoListView: View {
             .overlay {
                 if viewModel.photos.isEmpty {
                     ContentUnavailableView {
-                        Label("사진 없음", systemImage: "photo.on.rectangle.angled")
+                        Label("photoList.noPhotos", systemImage: "photo.on.rectangle.angled")
                     } description: {
-                        Text("사진 파일을 드래그하거나\n툴바의 사진 추가 버튼을 사용하세요.")
+                        Text("photoList.noPhotos.desc")
                     }
                 } else if viewModel.filteredPhotos.isEmpty {
                     ContentUnavailableView {
-                        Label("결과 없음", systemImage: "line.3.horizontal.decrease.circle")
+                        Label("photoList.noResults", systemImage: "line.3.horizontal.decrease.circle")
                     } description: {
-                        Text("'\(viewModel.photoFilter.rawValue)' 필터에 해당하는 사진이 없습니다.")
+                        Text("photoList.noResults.desc \(viewModel.photoFilter.label)")
                     }
                 }
             }
             .contextMenu(forSelectionType: UUID.self) { ids in
                 if !ids.isEmpty {
-                    Button("선택 항목 GPS 기록") {
+                    Button("photoList.writeSelected") {
                         viewModel.writeSelected()
                     }
                     .disabled(viewModel.isProcessing)
@@ -178,13 +178,13 @@ struct PhotoRowView: View {
 
     private func statusLabel(for status: PhotoItem.Status) -> String {
         switch status {
-        case .pending: "분석 중..."
-        case .hasGPS: "GPS 있음"
-        case .matched: "매칭됨"
-        case .noTime: "시각 없음"
-        case .noMatch: "매칭 실패"
-        case .written: "기록 완료"
-        case .error: "오류"
+        case .pending: String(localized: "photoStatus.pending")
+        case .hasGPS: String(localized: "photoStatus.hasGPS")
+        case .matched: String(localized: "photoStatus.matched")
+        case .noTime: String(localized: "photoStatus.noTime")
+        case .noMatch: String(localized: "photoStatus.noMatch")
+        case .written: String(localized: "photoStatus.written")
+        case .error: String(localized: "photoStatus.error")
         }
     }
 }
