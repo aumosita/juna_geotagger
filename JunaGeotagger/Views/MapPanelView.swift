@@ -48,6 +48,9 @@ struct MapPanelView: View {
             MapScaleView()
             MapZoomStepper()
         }
+        .safeAreaInset(edge: .bottom) {
+            Color.clear.frame(height: 40)
+        }
         .overlay(alignment: .topTrailing) {
             mapOverlayControls
         }
