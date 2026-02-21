@@ -29,14 +29,14 @@ struct ContentView: View {
             return .handled
         }
         .onChange(of: viewModel.selectedPhotoIDs) { _, _ in
-            quickLookCoordinator.updatePhotos(viewModel.photos, selectedIDs: viewModel.selectedPhotoIDs)
+            quickLookCoordinator.updatePhotos(viewModel.filteredPhotos, selectedIDs: viewModel.selectedPhotoIDs)
         }
     }
 
     // MARK: - QuickLook
 
     private func openQuickLook() {
-        quickLookCoordinator.updatePhotos(viewModel.photos, selectedIDs: viewModel.selectedPhotoIDs)
+        quickLookCoordinator.updatePhotos(viewModel.filteredPhotos, selectedIDs: viewModel.selectedPhotoIDs)
         quickLookCoordinator.togglePanel()
     }
 
