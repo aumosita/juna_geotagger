@@ -7,6 +7,8 @@ struct MapPanelView: View {
     @Environment(MainViewModel.self) private var viewModel
     @State private var mapCameraPosition: MapCameraPosition = .automatic
     @State private var selectedPhotoOnMap: PhotoItem?
+    @State private var isManualMode = false
+    @State private var manualPinCoord: CLLocationCoordinate2D?
 
     var body: some View {
         ZStack {
@@ -22,45 +24,73 @@ struct MapPanelView: View {
         }
     }
 
-    private var mapContent: some View {
-        Map(position: $mapCameraPosition, selection: $selectedPhotoOnMap) {
-            // GPX 트랙 라인
-            ForEach(viewModel.gpxFiles) { file in
-                ForEach(Array(file.segments.enumerated()), id: \.offset) { _, segment in
-                    MapPolyline(coordinates: segment.points)
-                        .stroke(.orange, lineWidth: 3)
-                }
-            }
+    // MARK: - Map Content
 
-            // 사진 위치 마커
-            ForEach(viewModel.photos.filter { $0.displayCoordinate != nil }) { photo in
-                if let coord = photo.displayCoordinate {
-                    Annotation(photo.filename, coordinate: coord) {
-                        PhotoMapPin(photo: photo)
+    private var mapContent: some View {
+        MapReader { proxy in
+            Map(position: $mapCameraPosition, selection: $selectedPhotoOnMap) {
+                // GPX 트랙 라인
+                ForEach(viewModel.gpxFiles) { file in
+                    ForEach(Array(file.segments.enumerated()), id: \.offset) { _, segment in
+                        MapPolyline(coordinates: segment.points)
+                            .stroke(.orange, lineWidth: 3)
                     }
-                    .tag(photo)
+                }
+
+                // 사진 위치 마커
+                ForEach(viewModel.photos.filter { $0.displayCoordinate != nil }) { photo in
+                    if let coord = photo.displayCoordinate {
+                        Annotation(photo.filename, coordinate: coord) {
+                            PhotoMapPin(photo: photo)
+                        }
+                        .tag(photo)
+                    }
+                }
+
+                // 수동 지정 핀
+                if let pin = manualPinCoord {
+                    Annotation("수동 지정", coordinate: pin) {
+                        Image(systemName: "mappin")
+                            .font(.title)
+                            .foregroundStyle(.red)
+                            .symbolEffect(.pulse, isActive: true)
+                    }
                 }
             }
-        }
-        .mapStyle(.standard(elevation: .realistic))
-        .mapControls {
-            MapCompass()
-            MapScaleView()
-            MapZoomStepper()
-        }
-        .safeAreaInset(edge: .bottom) {
-            Color.clear.frame(height: 40)
+            .mapStyle(.standard(elevation: .realistic))
+            .mapControls {
+                MapCompass()
+                MapScaleView()
+                MapZoomStepper()
+            }
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 40)
+            }
+            .onTapGesture { screenPoint in
+                guard isManualMode else { return }
+                guard let coord = proxy.convert(screenPoint, from: .local) else { return }
+                handleManualTap(coord)
+            }
         }
         .overlay(alignment: .topTrailing) {
             mapOverlayControls
         }
+        .overlay(alignment: .top) {
+            if isManualMode {
+                manualModeBanner
+            }
+        }
         .overlay(alignment: .bottom) {
-            if let photo = selectedPhotoOnMap {
+            if let coord = manualPinCoord {
+                manualPinConfirmation(coord)
+                    .padding(.bottom, 50)
+            } else if let photo = selectedPhotoOnMap, !isManualMode {
                 PhotoMapPopover(photo: photo)
                     .padding(.bottom, 50)
             }
         }
         .onChange(of: viewModel.selectedPhotoIDs) { _, newIDs in
+            guard !isManualMode else { return }
             guard newIDs.count == 1,
                   let id = newIDs.first,
                   let photo = viewModel.photos.first(where: { $0.id == id }),
@@ -77,9 +107,112 @@ struct MapPanelView: View {
         }
     }
 
+    // MARK: - Manual Tap
+
+    private func handleManualTap(_ coord: CLLocationCoordinate2D) {
+        withAnimation {
+            manualPinCoord = coord
+        }
+    }
+
+    // MARK: - Manual Mode Banner
+
+    private var manualModeBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "hand.tap.fill")
+            if viewModel.selectedPhotoIDs.isEmpty {
+                Text("먼저 사이드바에서 사진을 선택한 후, 지도를 클릭하세요.")
+            } else {
+                Text("\(viewModel.selectedPhotoIDs.count)장 선택됨 — 지도를 클릭하여 위치를 지정하세요")
+            }
+        }
+        .font(.callout)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.orange.opacity(0.9), in: RoundedRectangle(cornerRadius: 10))
+        .foregroundStyle(.white)
+        .shadow(radius: 4)
+        .padding(.top, 8)
+    }
+
+    // MARK: - Manual Pin Confirmation
+
+    private func manualPinConfirmation(_ coord: CLLocationCoordinate2D) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("수동 위치 지정")
+                    .font(.callout.bold())
+                Text(String(format: "%.5f, %.5f", coord.latitude, coord.longitude))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                if !viewModel.selectedPhotoIDs.isEmpty {
+                    Text("\(viewModel.selectedPhotoIDs.count)장에 적용")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+
+            Button("적용") {
+                viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
+                withAnimation {
+                    manualPinCoord = nil
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.green)
+            .disabled(viewModel.selectedPhotoIDs.isEmpty)
+
+            Button("기록") {
+                viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
+                viewModel.writeSelected()
+                withAnimation {
+                    manualPinCoord = nil
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.purple)
+            .disabled(viewModel.selectedPhotoIDs.isEmpty)
+
+            Button("취소") {
+                withAnimation {
+                    manualPinCoord = nil
+                }
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding(12)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .shadow(radius: 8)
+        .padding(.horizontal, 16)
+    }
+
+    // MARK: - Overlay Controls
+
     @ViewBuilder
     private var mapOverlayControls: some View {
         VStack(spacing: 8) {
+            // 수동 지정 모드 토글
+            Button {
+                withAnimation {
+                    isManualMode.toggle()
+                    if !isManualMode {
+                        manualPinCoord = nil
+                    }
+                }
+            } label: {
+                Image(systemName: isManualMode ? "hand.tap.fill" : "hand.tap")
+                    .padding(8)
+                    .background(
+                        isManualMode ? AnyShapeStyle(.orange) : AnyShapeStyle(.regularMaterial),
+                        in: RoundedRectangle(cornerRadius: 8)
+                    )
+                    .foregroundStyle(isManualMode ? .white : .primary)
+            }
+            .buttonStyle(.plain)
+            .help("수동 위치 지정 모드")
+
             Button {
                 withAnimation {
                     mapCameraPosition = .automatic
