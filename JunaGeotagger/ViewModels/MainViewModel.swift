@@ -22,6 +22,46 @@ final class MainViewModel {
     /// 지도에서 선택한 좌표 (수동 지오태깅용)
     var manualCoordinate: CLLocationCoordinate2D?
 
+    /// 필터 & 정렬
+    var photoFilter: PhotoFilter = .all
+    var photoSort: PhotoSort = .filename
+
+    enum PhotoFilter: String, CaseIterable {
+        case all       = "전체"
+        case hasGPS    = "GPS 있음"
+        case matched   = "매칭됨"
+        case noMatch   = "매칭 실패"
+        case noTime    = "시각 없음"
+        case written   = "기록 완료"
+    }
+
+    enum PhotoSort: String, CaseIterable {
+        case filename  = "파일명"
+        case dateTaken = "촬영 시각"
+    }
+
+    /// 필터 + 정렬이 적용된 사진 목록
+    var filteredPhotos: [PhotoItem] {
+        let filtered: [PhotoItem]
+        switch photoFilter {
+        case .all:      filtered = photos
+        case .hasGPS:   filtered = photos.filter { $0.status == .hasGPS }
+        case .matched:  filtered = photos.filter { $0.status == .matched }
+        case .noMatch:  filtered = photos.filter { $0.status == .noMatch || $0.status == .noTime }
+        case .noTime:   filtered = photos.filter { $0.status == .noTime }
+        case .written:  filtered = photos.filter { $0.status == .written }
+        }
+
+        switch photoSort {
+        case .filename:
+            return filtered.sorted { $0.filename.localizedStandardCompare($1.filename) == .orderedAscending }
+        case .dateTaken:
+            return filtered.sorted {
+                ($0.dateTaken ?? .distantFuture) < ($1.dateTaken ?? .distantFuture)
+            }
+        }
+    }
+
     // MARK: - Computed
 
     var photosWithGPS: [PhotoItem] {

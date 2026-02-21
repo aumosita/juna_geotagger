@@ -8,26 +8,66 @@ struct PhotoListView: View {
     var body: some View {
         @Bindable var vm = viewModel
 
-        List(viewModel.photos, selection: $vm.selectedPhotoIDs) { photo in
-            PhotoRowView(photo: photo)
-                .tag(photo.id)
-        }
-        .listStyle(.sidebar)
-        .overlay {
-            if viewModel.photos.isEmpty {
-                ContentUnavailableView {
-                    Label("사진 없음", systemImage: "photo.on.rectangle.angled")
-                } description: {
-                    Text("사진 파일을 드래그하거나\n툴바의 사진 추가 버튼을 사용하세요.")
+        VStack(spacing: 0) {
+            // 필터 & 정렬 컨트롤
+            VStack(spacing: 6) {
+                Picker("필터", selection: $vm.photoFilter) {
+                    ForEach(MainViewModel.PhotoFilter.allCases, id: \.self) { filter in
+                        Text(filter.rawValue).tag(filter)
+                    }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+
+                HStack {
+                    Picker("정렬", selection: $vm.photoSort) {
+                        ForEach(MainViewModel.PhotoSort.allCases, id: \.self) { sort in
+                            Text(sort.rawValue).tag(sort)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize()
+
+                    Spacer()
+
+                    Text("\(viewModel.filteredPhotos.count)장")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
-        }
-        .contextMenu(forSelectionType: UUID.self) { ids in
-            if !ids.isEmpty {
-                Button("선택 항목 GPS 기록") {
-                    viewModel.writeSelected()
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+
+            Divider()
+
+            // 사진 목록
+            List(viewModel.filteredPhotos, selection: $vm.selectedPhotoIDs) { photo in
+                PhotoRowView(photo: photo, showDate: viewModel.photoSort == .dateTaken)
+                    .tag(photo.id)
+            }
+            .listStyle(.sidebar)
+            .overlay {
+                if viewModel.photos.isEmpty {
+                    ContentUnavailableView {
+                        Label("사진 없음", systemImage: "photo.on.rectangle.angled")
+                    } description: {
+                        Text("사진 파일을 드래그하거나\n툴바의 사진 추가 버튼을 사용하세요.")
+                    }
+                } else if viewModel.filteredPhotos.isEmpty {
+                    ContentUnavailableView {
+                        Label("결과 없음", systemImage: "line.3.horizontal.decrease.circle")
+                    } description: {
+                        Text("'\(viewModel.photoFilter.rawValue)' 필터에 해당하는 사진이 없습니다.")
+                    }
                 }
-                .disabled(viewModel.isProcessing)
+            }
+            .contextMenu(forSelectionType: UUID.self) { ids in
+                if !ids.isEmpty {
+                    Button("선택 항목 GPS 기록") {
+                        viewModel.writeSelected()
+                    }
+                    .disabled(viewModel.isProcessing)
+                }
             }
         }
     }
@@ -37,7 +77,15 @@ struct PhotoListView: View {
 
 struct PhotoRowView: View {
     let photo: PhotoItem
+    var showDate: Bool = false
     @State private var thumbnail: NSImage?
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .short
+        f.timeStyle = .medium
+        return f
+    }()
 
     var body: some View {
         HStack(spacing: 10) {
@@ -71,6 +119,12 @@ struct PhotoRowView: View {
                     Text(statusLabel(for: photo.status))
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+
+                if showDate, let date = photo.dateTaken {
+                    Text(Self.dateFormatter.string(from: date))
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
                 }
             }
         }
