@@ -17,9 +17,31 @@ struct ContentView: View {
         .toolbar {
             toolbarContent
         }
-        .onDrop(of: [.fileURL], isTargeted: nil) { providers in
-            handleDrop(providers: providers)
-            return true
+        .dropDestination(for: URL.self) { urls, _ in
+            var photoURLs: [URL] = []
+            var gpxURLs: [URL] = []
+
+            for url in urls {
+                if url.pathExtension.lowercased() == "gpx" {
+                    gpxURLs.append(url)
+                } else if PhotoMetadataService.isSupported(url: url) {
+                    photoURLs.append(url)
+                } else {
+                    var isDir: ObjCBool = false
+                    if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir),
+                       isDir.boolValue {
+                        photoURLs.append(url)
+                    }
+                }
+            }
+
+            if !photoURLs.isEmpty {
+                viewModel.addPhotos(urls: photoURLs)
+            }
+            if !gpxURLs.isEmpty {
+                viewModel.addGPXFiles(urls: gpxURLs)
+            }
+            return !photoURLs.isEmpty || !gpxURLs.isEmpty
         }
         .overlay(alignment: .bottom) {
             StatusBarView()
@@ -90,52 +112,8 @@ struct ContentView: View {
             .help(Text("toolbar.clear.help"))
         }
     }
-
-    // MARK: - Drag & Drop
-
-    private func handleDrop(providers: [NSItemProvider]) {
-        Task { @MainActor in
-            var photoURLs: [URL] = []
-            var gpxURLs: [URL] = []
-
-            for provider in providers {
-                guard let url = await loadURL(from: provider) else { continue }
-
-                if url.pathExtension.lowercased() == "gpx" {
-                    gpxURLs.append(url)
-                } else if PhotoMetadataService.isSupported(url: url) {
-                    photoURLs.append(url)
-                } else {
-                    var isDir: ObjCBool = false
-                    if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir),
-                       isDir.boolValue {
-                        photoURLs.append(url)
-                    }
-                }
-            }
-
-            if !photoURLs.isEmpty {
-                viewModel.addPhotos(urls: photoURLs)
-            }
-            if !gpxURLs.isEmpty {
-                viewModel.addGPXFiles(urls: gpxURLs)
-            }
-        }
-    }
-
-    private func loadURL(from provider: NSItemProvider) async -> URL? {
-        await withCheckedContinuation { continuation in
-            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
-                if let data = item as? Data,
-                   let url = URL(dataRepresentation: data, relativeTo: nil) {
-                    continuation.resume(returning: url)
-                } else {
-                    continuation.resume(returning: nil)
-                }
-            }
-        }
-    }
 }
+
 
 // MARK: - Status Bar
 
