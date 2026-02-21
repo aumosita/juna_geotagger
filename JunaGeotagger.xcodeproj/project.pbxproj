@@ -14,6 +14,7 @@
 		557969B19A4EEE020AF0A3B2 /* GPXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6C9C508BA489326F8CB9AC /* GPXParser.swift */; };
 		6FC4B07CBE83D8A5D3BFD685 /* PhotoMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311D3783EFCC48C2413D770E /* PhotoMetadataService.swift */; };
 		AAFAD885363D40AA6BFA1E56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */; };
+		BE74CC74D644CCCB31312672 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 90E056E7CD3F8EF6D649E029 /* Localizable.strings */; };
 		CC538AAC89F99E0B7F514DBA /* QuickLookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1462148B8C85127C8DD0C9 /* QuickLookCoordinator.swift */; };
 		D6652A0EB012AF94BB0F4CEF /* GPXTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35E1A1F227010B4CE7AFDA6 /* GPXTrack.swift */; };
 		E4C6AC076968448B700B030F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453B4C6B6B8EA6A8C99073CD /* ContentView.swift */; };
@@ -23,15 +24,19 @@
 
 /* Begin PBXFileReference section */
 		058442536E5B5041CE210F7C /* JunaGeotagger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JunaGeotagger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07475D680B207E19CF60F288 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		311D3783EFCC48C2413D770E /* PhotoMetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMetadataService.swift; sourceTree = "<group>"; };
 		453B4C6B6B8EA6A8C99073CD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4A1180738690848E04A892D4 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		66EBD6C0F1C279AFB367A2A7 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		6829C5E464AE9C5500AA4E62 /* PhotoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListView.swift; sourceTree = "<group>"; };
 		8C5FA95A3538E9E7A8F1C198 /* MapPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPanelView.swift; sourceTree = "<group>"; };
 		8E831395CD6F8427B060B9B2 /* GeotagEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeotagEngine.swift; sourceTree = "<group>"; };
 		AC6C9C508BA489326F8CB9AC /* GPXParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXParser.swift; sourceTree = "<group>"; };
 		B35E1A1F227010B4CE7AFDA6 /* GPXTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXTrack.swift; sourceTree = "<group>"; };
+		C7F79E795204024C61E0A4C0 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CB14EF0B4DCE2F0DB2DA57BF /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		D295234C16CD5B085C8113E1 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEAEE8FDE40C69FFE6344FB9 /* JunaGeotaggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JunaGeotaggerApp.swift; sourceTree = "<group>"; };
 		FD1462148B8C85127C8DD0C9 /* QuickLookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookCoordinator.swift; sourceTree = "<group>"; };
@@ -76,6 +81,7 @@
 			children = (
 				DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */,
 				EEAEE8FDE40C69FFE6344FB9 /* JunaGeotaggerApp.swift */,
+				90E056E7CD3F8EF6D649E029 /* Localizable.strings */,
 				0691878B26F0C6DFC4BE01BC /* Models */,
 				FA18323BD3AF277ECA4DBBDF /* Services */,
 				457826921675EFC7A01E2DB3 /* ViewModels */,
@@ -147,6 +153,9 @@
 			knownRegions = (
 				Base,
 				en,
+				fr,
+				ja,
+				ko,
 			);
 			mainGroup = B10FCE17BF608B2C98480CB6;
 			minimizedProjectReferenceProxies = 1;
@@ -165,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAFAD885363D40AA6BFA1E56 /* Assets.xcassets in Resources */,
+				BE74CC74D644CCCB31312672 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +200,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		90E056E7CD3F8EF6D649E029 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07475D680B207E19CF60F288 /* en */,
+				4A1180738690848E04A892D4 /* fr */,
+				D295234C16CD5B085C8113E1 /* ja */,
+				C7F79E795204024C61E0A4C0 /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		06B1134D68AFA2D8EB536342 /* Debug */ = {

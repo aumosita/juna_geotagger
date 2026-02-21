@@ -19,10 +19,6 @@ targets:
     platform: macOS
     sources:
       - path: JunaGeotagger
-        excludes:
-          - "Resources/**"
-    resources:
-      - path: JunaGeotagger/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.aumosita.JunaGeotagger
