@@ -77,3 +77,5 @@
 "map.manual.cancel" = "Annuler";
 "map.manual.modeHelp" = "Mode position manuelle";
 "map.fitAll" = "Tout afficher";
+
+"map.drop.hint" = "Déposez ici pour définir la position";

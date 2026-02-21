@@ -77,3 +77,5 @@
 "map.manual.cancel" = "취소";
 "map.manual.modeHelp" = "수동 위치 지정 모드";
 "map.fitAll" = "전체 보기";
+
+"map.drop.hint" = "여기에 드롭하여 위치를 지정합니다";

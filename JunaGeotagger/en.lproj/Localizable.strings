@@ -77,3 +77,5 @@
 "map.manual.cancel" = "Cancel";
 "map.manual.modeHelp" = "Manual location mode";
 "map.fitAll" = "Fit All";
+
+"map.drop.hint" = "Drop here to set location";

@@ -1,14 +1,26 @@
 import SwiftUI
 import MapKit
 import QuickLookThumbnailing
+import UniformTypeIdentifiers
 
-/// 지도 패널 — GPX 트랙, 사진 위치 표시, 수동 위치 지정
+/// 지도 패널 — GPX 트랙, 사진 위치 표시, 드래그 앤 드롭 위치 지정
 struct MapPanelView: View {
     @Environment(MainViewModel.self) private var viewModel
     @State private var mapCameraPosition: MapCameraPosition = .automatic
     @State private var selectedPhotoOnMap: PhotoItem?
-    @State private var isManualMode = false
-    @State private var manualPinCoord: CLLocationCoordinate2D?
+    @State private var droppedPin: DroppedPin?
+    @State private var isDragOver = false
+
+    struct DroppedPin: Equatable {
+        let coord: CLLocationCoordinate2D
+        let photoIDs: Set<UUID>
+
+        static func == (lhs: DroppedPin, rhs: DroppedPin) -> Bool {
+            lhs.coord.latitude == rhs.coord.latitude &&
+            lhs.coord.longitude == rhs.coord.longitude &&
+            lhs.photoIDs == rhs.photoIDs
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -47,9 +59,9 @@ struct MapPanelView: View {
                     }
                 }
 
-                // 수동 지정 핀
-                if let pin = manualPinCoord {
-                    Annotation(String(localized: "map.manualPin"), coordinate: pin) {
+                // 드롭 핀
+                if let pin = droppedPin {
+                    Annotation(String(localized: "map.manualPin"), coordinate: pin.coord) {
                         Image(systemName: "mappin")
                             .font(.title)
                             .foregroundStyle(.red)
@@ -66,36 +78,49 @@ struct MapPanelView: View {
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 40)
             }
-            .gesture(
-                isManualMode ?
-                SpatialTapGesture()
-                    .onEnded { value in
-                        if let coord = proxy.convert(value.location, from: .local) {
-                            handleManualTap(coord)
-                        }
+            // 드래그 앤 드롭 — 사진을 지도에 드롭하여 좌표 지정
+            .dropDestination(for: String.self) { items, location in
+                guard let coord = proxy.convert(location, from: .local) else { return false }
+
+                // 드롭된 UUID들 파싱
+                var ids = Set<UUID>()
+                for item in items {
+                    if let uuid = UUID(uuidString: item) {
+                        ids.insert(uuid)
                     }
-                : nil
-            )
+                }
+
+                // 선택된 사진도 포함 (하나만 드래그해도 선택된 전체 적용)
+                ids.formUnion(viewModel.selectedPhotoIDs)
+
+                guard !ids.isEmpty else { return false }
+
+                withAnimation {
+                    droppedPin = DroppedPin(coord: coord, photoIDs: ids)
+                }
+                return true
+            } isTargeted: { targeted in
+                isDragOver = targeted
+            }
         }
         .overlay(alignment: .topTrailing) {
             mapOverlayControls
         }
         .overlay(alignment: .top) {
-            if isManualMode {
-                manualModeBanner
+            if isDragOver {
+                dropHintBanner
             }
         }
         .overlay(alignment: .bottom) {
-            if let coord = manualPinCoord {
-                manualPinConfirmation(coord)
+            if let pin = droppedPin {
+                dropConfirmation(pin)
                     .padding(.bottom, 50)
-            } else if let photo = selectedPhotoOnMap, !isManualMode {
+            } else if let photo = selectedPhotoOnMap {
                 PhotoMapPopover(photo: photo)
                     .padding(.bottom, 50)
             }
         }
         .onChange(of: viewModel.selectedPhotoIDs) { _, newIDs in
-            guard !isManualMode else { return }
             guard newIDs.count == 1,
                   let id = newIDs.first,
                   let photo = viewModel.photos.first(where: { $0.id == id }),
@@ -112,78 +137,60 @@ struct MapPanelView: View {
         }
     }
 
-    // MARK: - Manual Tap
+    // MARK: - Drop Hint Banner
 
-    private func handleManualTap(_ coord: CLLocationCoordinate2D) {
-        withAnimation {
-            manualPinCoord = coord
-        }
-    }
-
-    // MARK: - Manual Mode Banner
-
-    private var manualModeBanner: some View {
+    private var dropHintBanner: some View {
         HStack(spacing: 8) {
-            Image(systemName: "hand.tap.fill")
-            if viewModel.selectedPhotoIDs.isEmpty {
-                Text("map.manual.selectFirst")
-            } else {
-                Text("map.manual.selected \(viewModel.selectedPhotoIDs.count)")
-            }
+            Image(systemName: "arrow.down.to.line")
+            Text("map.drop.hint")
         }
         .font(.callout)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(.orange.opacity(0.9), in: RoundedRectangle(cornerRadius: 10))
+        .background(.green.opacity(0.9), in: RoundedRectangle(cornerRadius: 10))
         .foregroundStyle(.white)
         .shadow(radius: 4)
         .padding(.top, 8)
     }
 
-    // MARK: - Manual Pin Confirmation
+    // MARK: - Drop Confirmation
 
-    private func manualPinConfirmation(_ coord: CLLocationCoordinate2D) -> some View {
+    private func dropConfirmation(_ pin: DroppedPin) -> some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("map.manual.title")
                     .font(.callout.bold())
-                Text(String(format: "%.5f, %.5f", coord.latitude, coord.longitude))
+                Text(String(format: "%.5f, %.5f", pin.coord.latitude, pin.coord.longitude))
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                if !viewModel.selectedPhotoIDs.isEmpty {
-                    Text(String(localized: "map.manual.applyCount \(viewModel.selectedPhotoIDs.count)"))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                Text(String(localized: "map.manual.applyCount \(pin.photoIDs.count)"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             Button("map.manual.apply") {
-                viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
-                withAnimation {
-                    manualPinCoord = nil
-                }
+                viewModel.applyManualCoordinate(pin.coord, to: pin.photoIDs)
+                withAnimation { droppedPin = nil }
             }
             .buttonStyle(.borderedProminent)
             .tint(.green)
-            .disabled(viewModel.selectedPhotoIDs.isEmpty)
 
             Button("map.manual.write") {
-                viewModel.applyManualCoordinate(coord, to: viewModel.selectedPhotoIDs)
-                viewModel.writeSelected()
-                withAnimation {
-                    manualPinCoord = nil
+                viewModel.applyManualCoordinate(pin.coord, to: pin.photoIDs)
+                // writeGPS to the specific photos
+                let targets = viewModel.photos.filter { pin.photoIDs.contains($0.id) && $0.status == .matched }
+                if !targets.isEmpty {
+                    viewModel.writeGPSPublic(to: targets)
                 }
+                withAnimation { droppedPin = nil }
             }
             .buttonStyle(.borderedProminent)
             .tint(.purple)
-            .disabled(viewModel.selectedPhotoIDs.isEmpty)
 
             Button("map.manual.cancel") {
-                withAnimation {
-                    manualPinCoord = nil
-                }
+                withAnimation { droppedPin = nil }
             }
             .buttonStyle(.bordered)
         }
@@ -198,26 +205,6 @@ struct MapPanelView: View {
     @ViewBuilder
     private var mapOverlayControls: some View {
         VStack(spacing: 8) {
-            // 수동 지정 모드 토글
-            Button {
-                withAnimation {
-                    isManualMode.toggle()
-                    if !isManualMode {
-                        manualPinCoord = nil
-                    }
-                }
-            } label: {
-                Image(systemName: isManualMode ? "hand.tap.fill" : "hand.tap")
-                    .padding(8)
-                    .background(
-                        isManualMode ? AnyShapeStyle(.orange) : AnyShapeStyle(.regularMaterial),
-                        in: RoundedRectangle(cornerRadius: 8)
-                    )
-                    .foregroundStyle(isManualMode ? .white : .primary)
-            }
-            .buttonStyle(.plain)
-            .help(Text("map.manual.modeHelp"))
-
             Button {
                 withAnimation {
                     mapCameraPosition = .automatic

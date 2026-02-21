@@ -250,6 +250,11 @@ final class MainViewModel {
         writeGPS(to: targets)
     }
 
+    /// 특정 사진들에 GPS를 기록합니다 (드래그 앤 드롭용).
+    func writeGPSPublic(to targets: [PhotoItem]) {
+        writeGPS(to: targets)
+    }
+
     /// 수동으로 선택한 좌표를 사진에 기록합니다.
     func applyManualCoordinate(_ coord: CLLocationCoordinate2D, to photoIDs: Set<UUID>) {
         let targets = photos.filter { photoIDs.contains($0.id) }

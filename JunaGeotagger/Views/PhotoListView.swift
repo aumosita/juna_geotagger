@@ -44,6 +44,7 @@ struct PhotoListView: View {
             List(viewModel.filteredPhotos, selection: $vm.selectedPhotoIDs) { photo in
                 PhotoRowView(photo: photo, showDate: viewModel.photoSort == .dateTaken)
                     .tag(photo.id)
+                    .draggable(photo.id.uuidString)
             }
             .listStyle(.sidebar)
             .overlay {
