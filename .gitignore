@@ -1,27 +1,21 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
-# Virtual environment
-.venv/
-venv/
-ENV/
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
+# macOS
 .DS_Store
-Thumbs.db
+*.swp
+*~
 
-# Test photos/data (adjust as needed)
-*.jpg
-*.jpeg
-*.JPG
-*.JPEG
-*.gpx
+# Python (legacy)
+__pycache__/
+*.pyc
+.venv/
