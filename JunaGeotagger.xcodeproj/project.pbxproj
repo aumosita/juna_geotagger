@@ -13,6 +13,7 @@
 		30E8EF849EE9A4CDE01DCB4C /* MapPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5FA95A3538E9E7A8F1C198 /* MapPanelView.swift */; };
 		557969B19A4EEE020AF0A3B2 /* GPXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6C9C508BA489326F8CB9AC /* GPXParser.swift */; };
 		6FC4B07CBE83D8A5D3BFD685 /* PhotoMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311D3783EFCC48C2413D770E /* PhotoMetadataService.swift */; };
+		AAFAD885363D40AA6BFA1E56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */; };
 		D6652A0EB012AF94BB0F4CEF /* GPXTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35E1A1F227010B4CE7AFDA6 /* GPXTrack.swift */; };
 		E4C6AC076968448B700B030F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453B4C6B6B8EA6A8C99073CD /* ContentView.swift */; };
 		F7E1E5DB6464A004357F5DC3 /* PhotoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6829C5E464AE9C5500AA4E62 /* PhotoListView.swift */; };
@@ -30,6 +31,7 @@
 		AC6C9C508BA489326F8CB9AC /* GPXParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXParser.swift; sourceTree = "<group>"; };
 		B35E1A1F227010B4CE7AFDA6 /* GPXTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXTrack.swift; sourceTree = "<group>"; };
 		CB14EF0B4DCE2F0DB2DA57BF /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEAEE8FDE40C69FFE6344FB9 /* JunaGeotaggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JunaGeotaggerApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +72,7 @@
 		D58A3503A23DA7AF3AD272D3 /* JunaGeotagger */ = {
 			isa = PBXGroup;
 			children = (
+				DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */,
 				EEAEE8FDE40C69FFE6344FB9 /* JunaGeotaggerApp.swift */,
 				0691878B26F0C6DFC4BE01BC /* Models */,
 				FA18323BD3AF277ECA4DBBDF /* Services */,
@@ -107,6 +110,7 @@
 			buildConfigurationList = CD9421BB8E166AF5936F4398 /* Build configuration list for PBXNativeTarget "JunaGeotagger" */;
 			buildPhases = (
 				55C32B032780D50C89399E9E /* Sources */,
+				8A63B19488FC1D94282B8ADD /* Resources */,
 			);
 			buildRules = (
 			);
@@ -151,6 +155,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A63B19488FC1D94282B8ADD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAFAD885363D40AA6BFA1E56 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		55C32B032780D50C89399E9E /* Sources */ = {
