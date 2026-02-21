@@ -57,8 +57,20 @@ struct MapPanelView: View {
                     .padding(.bottom, 50)
             }
         }
-        .onTapGesture { location in
-            // 수동 위치 지정은 별도 모드에서 처리
+        .onChange(of: viewModel.selectedPhotoIDs) { _, newIDs in
+            guard newIDs.count == 1,
+                  let id = newIDs.first,
+                  let photo = viewModel.photos.first(where: { $0.id == id }),
+                  let coord = photo.displayCoordinate else { return }
+
+            withAnimation(.easeInOut(duration: 0.6)) {
+                mapCameraPosition = .region(MKCoordinateRegion(
+                    center: coord,
+                    latitudinalMeters: 500,
+                    longitudinalMeters: 500
+                ))
+                selectedPhotoOnMap = photo
+            }
         }
     }
 
