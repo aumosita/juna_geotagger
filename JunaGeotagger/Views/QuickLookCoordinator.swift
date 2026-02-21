@@ -6,14 +6,17 @@ import AppKit
 final class QuickLookCoordinator: NSObject, @preconcurrency QLPreviewPanelDataSource, @preconcurrency QLPreviewPanelDelegate {
 
     private var previewURLs: [URL] = []
+    private var photoIDs: [UUID] = []
     private var startIndex: Int = 0
 
+    /// 사이드바 선택 동기화 콜백
+    var onSelectionChanged: ((UUID) -> Void)?
+
     /// 전체 사진 목록과 선택된 사진을 설정합니다.
-    /// 전체 목록을 넘기므로 화살표로 모든 사진을 탐색할 수 있습니다.
     func updatePhotos(_ photos: [PhotoItem], selectedIDs: Set<UUID>) {
         previewURLs = photos.map { $0.url }
+        photoIDs = photos.map { $0.id }
 
-        // 선택된 사진의 인덱스를 시작점으로 설정
         if let firstSelectedID = selectedIDs.first,
            let idx = photos.firstIndex(where: { $0.id == firstSelectedID }) {
             startIndex = idx
@@ -21,7 +24,6 @@ final class QuickLookCoordinator: NSObject, @preconcurrency QLPreviewPanelDataSo
             startIndex = 0
         }
 
-        // QuickLook 패널이 열려 있으면 새로고침
         if let panel = QLPreviewPanel.shared(), panel.isVisible {
             panel.reloadData()
             panel.currentPreviewItemIndex = startIndex
@@ -55,23 +57,30 @@ final class QuickLookCoordinator: NSObject, @preconcurrency QLPreviewPanelDataSo
 
     // MARK: - QLPreviewPanelDelegate
 
-    /// 위/아래 화살표도 좌/우처럼 이전/다음 사진으로 이동
+    /// 모든 화살표 키를 처리하고 사이드바 선택을 동기화
     func previewPanel(_ panel: QLPreviewPanel!, handle event: NSEvent!) -> Bool {
         guard event.type == .keyDown else { return false }
 
         switch event.keyCode {
-        case 126: // ↑ 위 화살표 → 이전
+        case 126, 123: // ↑ 또는 ← → 이전
             if panel.currentPreviewItemIndex > 0 {
                 panel.currentPreviewItemIndex -= 1
+                syncSelection(index: panel.currentPreviewItemIndex)
             }
             return true
-        case 125: // ↓ 아래 화살표 → 다음
+        case 125, 124: // ↓ 또는 → → 다음
             if panel.currentPreviewItemIndex < previewURLs.count - 1 {
                 panel.currentPreviewItemIndex += 1
+                syncSelection(index: panel.currentPreviewItemIndex)
             }
             return true
         default:
             return false
         }
+    }
+
+    private func syncSelection(index: Int) {
+        guard index >= 0 && index < photoIDs.count else { return }
+        onSelectionChanged?(photoIDs[index])
     }
 }

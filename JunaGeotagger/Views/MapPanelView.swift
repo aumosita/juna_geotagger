@@ -66,11 +66,16 @@ struct MapPanelView: View {
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 40)
             }
-            .onTapGesture { screenPoint in
-                guard isManualMode else { return }
-                guard let coord = proxy.convert(screenPoint, from: .local) else { return }
-                handleManualTap(coord)
-            }
+            .gesture(
+                isManualMode ?
+                SpatialTapGesture()
+                    .onEnded { value in
+                        if let coord = proxy.convert(value.location, from: .local) {
+                            handleManualTap(coord)
+                        }
+                    }
+                : nil
+            )
         }
         .overlay(alignment: .topTrailing) {
             mapOverlayControls

@@ -36,6 +36,9 @@ struct ContentView: View {
     // MARK: - QuickLook
 
     private func openQuickLook() {
+        quickLookCoordinator.onSelectionChanged = { [weak viewModel] photoID in
+            viewModel?.selectedPhotoIDs = [photoID]
+        }
         quickLookCoordinator.updatePhotos(viewModel.filteredPhotos, selectedIDs: viewModel.selectedPhotoIDs)
         quickLookCoordinator.togglePanel()
     }
