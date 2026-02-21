@@ -14,6 +14,7 @@
 		557969B19A4EEE020AF0A3B2 /* GPXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6C9C508BA489326F8CB9AC /* GPXParser.swift */; };
 		6FC4B07CBE83D8A5D3BFD685 /* PhotoMetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311D3783EFCC48C2413D770E /* PhotoMetadataService.swift */; };
 		AAFAD885363D40AA6BFA1E56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */; };
+		CC538AAC89F99E0B7F514DBA /* QuickLookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1462148B8C85127C8DD0C9 /* QuickLookCoordinator.swift */; };
 		D6652A0EB012AF94BB0F4CEF /* GPXTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35E1A1F227010B4CE7AFDA6 /* GPXTrack.swift */; };
 		E4C6AC076968448B700B030F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453B4C6B6B8EA6A8C99073CD /* ContentView.swift */; };
 		F7E1E5DB6464A004357F5DC3 /* PhotoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6829C5E464AE9C5500AA4E62 /* PhotoListView.swift */; };
@@ -33,6 +34,7 @@
 		CB14EF0B4DCE2F0DB2DA57BF /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		DDE28E7ECF602C4E2B0F1BB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EEAEE8FDE40C69FFE6344FB9 /* JunaGeotaggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JunaGeotaggerApp.swift; sourceTree = "<group>"; };
+		FD1462148B8C85127C8DD0C9 /* QuickLookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -98,6 +100,7 @@
 				453B4C6B6B8EA6A8C99073CD /* ContentView.swift */,
 				8C5FA95A3538E9E7A8F1C198 /* MapPanelView.swift */,
 				6829C5E464AE9C5500AA4E62 /* PhotoListView.swift */,
+				FD1462148B8C85127C8DD0C9 /* QuickLookCoordinator.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 				2A7EF6D9A490AC77304B66EC /* PhotoItem.swift in Sources */,
 				F7E1E5DB6464A004357F5DC3 /* PhotoListView.swift in Sources */,
 				6FC4B07CBE83D8A5D3BFD685 /* PhotoMetadataService.swift in Sources */,
+				CC538AAC89F99E0B7F514DBA /* QuickLookCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

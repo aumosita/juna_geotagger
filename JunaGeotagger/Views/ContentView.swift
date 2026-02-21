@@ -1,9 +1,11 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import Quartz
 
 /// 메인 콘텐츠 뷰 — 3열 레이아웃 (사진 목록 | 지도 | 상세정보)
 struct ContentView: View {
     @Environment(MainViewModel.self) private var viewModel
+    @State private var quickLookCoordinator = QuickLookCoordinator()
 
     var body: some View {
         NavigationSplitView {
@@ -22,6 +24,20 @@ struct ContentView: View {
         .overlay(alignment: .bottom) {
             StatusBarView()
         }
+        .onKeyPress(.space) {
+            openQuickLook()
+            return .handled
+        }
+        .onChange(of: viewModel.selectedPhotoIDs) { _, _ in
+            quickLookCoordinator.updatePhotos(viewModel.photos, selectedIDs: viewModel.selectedPhotoIDs)
+        }
+    }
+
+    // MARK: - QuickLook
+
+    private func openQuickLook() {
+        quickLookCoordinator.updatePhotos(viewModel.photos, selectedIDs: viewModel.selectedPhotoIDs)
+        quickLookCoordinator.togglePanel()
     }
 
     // MARK: - Toolbar
