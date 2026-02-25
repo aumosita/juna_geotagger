@@ -16,6 +16,11 @@ final class MainViewModel {
 
     var selectedPhotoIDs: Set<UUID> = []
     var isProcessing = false
+    var isLoadingPhotos = false
+    var isLoadingGPX = false
+
+    /// 중복 파일 Alert 메시지 (nil이 아니면 Alert 표시)
+    var duplicateAlertMessage: String?
     var statusMessage = String(localized: "status.ready")
     var maxGapSeconds: TimeInterval = GeotagEngine.defaultMaxGapSeconds
 
@@ -145,12 +150,20 @@ final class MainViewModel {
         // 중복 방지
         let existingPaths = Set(photos.map { $0.url.path })
         let newURLs = fileURLs.filter { !existingPaths.contains($0.path) }
+        let duplicateCount = fileURLs.count - newURLs.count
+
+        if duplicateCount > 0 {
+            duplicateAlertMessage = String(localized: "alert.duplicatePhotos \(duplicateCount)")
+        }
 
         guard !newURLs.isEmpty else {
-            statusMessage = String(localized: "status.noNewPhotos")
+            if duplicateCount == 0 {
+                statusMessage = String(localized: "status.noNewPhotos")
+            }
             return
         }
 
+        isLoadingPhotos = true
         let newPhotos = newURLs.map { PhotoItem(url: $0) }
         photos.append(contentsOf: newPhotos)
 
@@ -159,6 +172,7 @@ final class MainViewModel {
         // 백그라운드에서 메타데이터 읽기
         Task {
             await loadMetadata(for: newPhotos)
+            isLoadingPhotos = false
             runMatching()
         }
     }
@@ -186,11 +200,20 @@ final class MainViewModel {
         // 중복 방지
         let existingPaths = Set(gpxFiles.map { $0.url.path })
         let newURLs = gpxURLs.filter { !existingPaths.contains($0.path) }
+        let duplicateCount = gpxURLs.count - newURLs.count
+
+        if duplicateCount > 0 {
+            duplicateAlertMessage = String(localized: "alert.duplicateGPX \(duplicateCount)")
+        }
+
         guard !newURLs.isEmpty else {
-            statusMessage = String(localized: "status.noNewGPX")
+            if duplicateCount == 0 {
+                statusMessage = String(localized: "status.noNewGPX")
+            }
             return
         }
 
+        isLoadingGPX = true
         let urlsToProcess = newURLs
         Task {
             let (newFiles, _) = await Task.detached {
@@ -205,6 +228,7 @@ final class MainViewModel {
             let pointCount = newFiles.reduce(0) { $0 + $1.trackPoints.count }
             self.statusMessage = String(localized: "status.gpxLoaded \(newFiles.count) \(pointCount)")
 
+            self.isLoadingGPX = false
             self.runMatching()
         }
     }

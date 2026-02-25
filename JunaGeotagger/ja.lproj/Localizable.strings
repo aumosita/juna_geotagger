@@ -79,3 +79,13 @@
 "map.fitAll" = "全体表示";
 
 "map.drop.hint" = "ここにドロップして位置を設定";
+
+/* === 読み込み === */
+"loading.photos" = "写真を読み込み中...";
+"loading.gpx" = "GPXファイルを読み込み中...";
+"loading.all" = "ファイルを読み込み中...";
+
+/* === 重複アラート === */
+"alert.duplicateTitle" = "重複ファイル";
+"alert.duplicatePhotos %lld" = "%lld枚の重複写真が除外されました。";
+"alert.duplicateGPX %lld" = "%lld個の重複GPXファイルが除外されました。";

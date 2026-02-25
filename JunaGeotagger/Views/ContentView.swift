@@ -7,6 +7,13 @@ struct ContentView: View {
     @Environment(MainViewModel.self) private var viewModel
     @State private var quickLookCoordinator = QuickLookCoordinator()
 
+    private var showDuplicateAlert: Binding<Bool> {
+        Binding(
+            get: { viewModel.duplicateAlertMessage != nil },
+            set: { if !$0 { viewModel.duplicateAlertMessage = nil } }
+        )
+    }
+
     var body: some View {
         NavigationSplitView {
             PhotoListView()
@@ -45,6 +52,22 @@ struct ContentView: View {
         }
         .overlay(alignment: .bottom) {
             StatusBarView()
+        }
+        .overlay {
+            if viewModel.isLoadingPhotos || viewModel.isLoadingGPX {
+                LoadingOverlayView(
+                    isLoadingPhotos: viewModel.isLoadingPhotos,
+                    isLoadingGPX: viewModel.isLoadingGPX
+                )
+            }
+        }
+        .alert(
+            String(localized: "alert.duplicateTitle"),
+            isPresented: showDuplicateAlert
+        ) {
+            Button("OK") { viewModel.duplicateAlertMessage = nil }
+        } message: {
+            Text(viewModel.duplicateAlertMessage ?? "")
         }
         .onKeyPress(.space) {
             openQuickLook()
@@ -156,5 +179,43 @@ struct StatusBarView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+}
+
+// MARK: - Loading Overlay
+
+struct LoadingOverlayView: View {
+    let isLoadingPhotos: Bool
+    let isLoadingGPX: Bool
+
+    private var message: String {
+        if isLoadingPhotos && isLoadingGPX {
+            return String(localized: "loading.all")
+        } else if isLoadingPhotos {
+            return String(localized: "loading.photos")
+        } else {
+            return String(localized: "loading.gpx")
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.25)
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                ProgressView()
+                    .controlSize(.large)
+
+                Text(message)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+            }
+            .padding(32)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        }
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.2), value: isLoadingPhotos)
+        .animation(.easeInOut(duration: 0.2), value: isLoadingGPX)
     }
 }

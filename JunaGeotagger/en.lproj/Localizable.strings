@@ -79,3 +79,13 @@
 "map.fitAll" = "Fit All";
 
 "map.drop.hint" = "Drop here to set location";
+
+/* === Loading === */
+"loading.photos" = "Loading photos...";
+"loading.gpx" = "Loading GPX files...";
+"loading.all" = "Loading files...";
+
+/* === Duplicate Alert === */
+"alert.duplicateTitle" = "Duplicate Files";
+"alert.duplicatePhotos %lld" = "%lld duplicate photo(s) excluded.";
+"alert.duplicateGPX %lld" = "%lld duplicate GPX file(s) excluded.";

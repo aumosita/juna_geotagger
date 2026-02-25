@@ -79,3 +79,13 @@
 "map.fitAll" = "전체 보기";
 
 "map.drop.hint" = "여기에 드롭하여 위치를 지정합니다";
+
+/* === 로딩 === */
+"loading.photos" = "사진을 불러오는 중...";
+"loading.gpx" = "GPX 파일을 불러오는 중...";
+"loading.all" = "파일을 불러오는 중...";
+
+/* === 중복 알림 === */
+"alert.duplicateTitle" = "중복 파일";
+"alert.duplicatePhotos %lld" = "%lld장의 중복 사진이 제외되었습니다.";
+"alert.duplicateGPX %lld" = "%lld개의 중복 GPX 파일이 제외되었습니다.";

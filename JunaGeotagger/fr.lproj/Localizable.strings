@@ -79,3 +79,13 @@
 "map.fitAll" = "Tout afficher";
 
 "map.drop.hint" = "Déposez ici pour définir la position";
+
+/* === Chargement === */
+"loading.photos" = "Chargement des photos...";
+"loading.gpx" = "Chargement des fichiers GPX...";
+"loading.all" = "Chargement des fichiers...";
+
+/* === Alerte de doublons === */
+"alert.duplicateTitle" = "Fichiers en double";
+"alert.duplicatePhotos %lld" = "%lld photo(s) en double exclue(s).";
+"alert.duplicateGPX %lld" = "%lld fichier(s) GPX en double exclu(s).";
