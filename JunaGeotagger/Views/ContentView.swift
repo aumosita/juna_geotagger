@@ -97,6 +97,7 @@ struct ContentView: View {
                 viewModel.importPhotos()
             } label: {
                 Label("toolbar.addPhotos", systemImage: "photo.on.rectangle.angled")
+                    .labelStyle(.titleAndIcon)
             }
             .help(Text("toolbar.addPhotos.help"))
 
@@ -104,6 +105,7 @@ struct ContentView: View {
                 viewModel.importGPX()
             } label: {
                 Label("toolbar.addGPX", systemImage: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
+                    .labelStyle(.titleAndIcon)
             }
             .help(Text("toolbar.addGPX.help"))
 
@@ -113,6 +115,7 @@ struct ContentView: View {
                 viewModel.runMatching()
             } label: {
                 Label("toolbar.runMatching", systemImage: "arrow.triangle.2.circlepath")
+                    .labelStyle(.titleAndIcon)
             }
             .help(Text("toolbar.runMatching.help"))
             .disabled(viewModel.allTrackPoints.isEmpty || viewModel.photos.isEmpty)
@@ -121,6 +124,7 @@ struct ContentView: View {
                 viewModel.writeAllMatched()
             } label: {
                 Label("toolbar.writeAll", systemImage: "square.and.arrow.down.on.square")
+                    .labelStyle(.titleAndIcon)
             }
             .help(Text("toolbar.writeAll.help"))
             .disabled(viewModel.matchedCount == 0 || viewModel.isProcessing)
@@ -131,6 +135,7 @@ struct ContentView: View {
                 viewModel.clearAll()
             } label: {
                 Label("toolbar.clear", systemImage: "trash")
+                    .labelStyle(.titleAndIcon)
             }
             .help(Text("toolbar.clear.help"))
         }
