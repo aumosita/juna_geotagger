@@ -128,16 +128,6 @@ struct ContentView: View {
             }
             .help(Text("toolbar.writeAll.help"))
             .disabled(viewModel.matchedCount == 0 || viewModel.isProcessing)
-
-            Divider()
-
-            Button {
-                viewModel.clearAll()
-            } label: {
-                Label("toolbar.clear", systemImage: "trash")
-                    .labelStyle(.titleAndIcon)
-            }
-            .help(Text("toolbar.clear.help"))
         }
     }
 }
